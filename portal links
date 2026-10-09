@@ -1,0 +1,7 @@
+Portal	URL	Default Login Credentials
+Home / Landing Page	http://localhost:3000	—
+Admin Portal	http://localhost:3000/admin/login	Email: admin@examportal.com
+Password: admin123
+Student Portal	http://localhost:3000/student/login	Reg No: STU001 (or STU002, STU003)
+Password: student123
+Backend API	http://localhost:4000	Health / API root

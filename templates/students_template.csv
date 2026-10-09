@@ -1,0 +1,6 @@
+name,regNo,className,email,password
+John Doe,STU101,CS-A,john@student.com,pass1234
+Jane Smith,STU102,CS-A,jane@student.com,pass1234
+Bob Wilson,STU103,CS-B,,
+Alice Brown,STU104,CS-B,alice@student.com,
+Charlie Davis,STU105,CS-C,charlie@student.com,mypass123

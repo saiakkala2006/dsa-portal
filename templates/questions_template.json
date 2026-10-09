@@ -1,0 +1,73 @@
+[
+  {
+    "title": "Palindrome Check",
+    "description": "Given a string s, determine if it is a palindrome, considering only alphanumeric characters and ignoring cases.\n\nReturn true if it is a palindrome, false otherwise.",
+    "constraints": "1 <= s.length <= 2 * 10^5\ns consists only of printable ASCII characters.",
+    "inputFormat": "A single line containing the string s",
+    "outputFormat": "true or false",
+    "sampleInput": "A man, a plan, a canal: Panama",
+    "sampleOutput": "true",
+    "maxMarks": 100,
+    "allowedLanguages": ["python", "java", "c", "cpp"],
+    "timeLimitMs": 2000,
+    "memoryLimitKb": 262144,
+    "starterCodePython": "s = input()\n# Check if palindrome\n",
+    "starterCodeJava": "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.nextLine();\n        // Check if palindrome\n    }\n}",
+    "starterCodeC": "#include <stdio.h>\n#include <string.h>\n#include <ctype.h>\n\nint main() {\n    char s[200001];\n    fgets(s, sizeof(s), stdin);\n    // Check if palindrome\n    return 0;\n}",
+    "starterCodeCpp": "#include <iostream>\n#include <string>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    string s;\n    getline(cin, s);\n    // Check if palindrome\n    return 0;\n}",
+    "testCases": [
+      { "input": "A man, a plan, a canal: Panama", "expectedOutput": "true", "isSample": true, "weight": 1.0, "order": 1 },
+      { "input": "race a car", "expectedOutput": "false", "isSample": true, "weight": 1.0, "order": 2 },
+      { "input": " ", "expectedOutput": "true", "isSample": false, "weight": 1.0, "order": 3 },
+      { "input": "ab", "expectedOutput": "false", "isSample": false, "weight": 1.0, "order": 4 },
+      { "input": "a", "expectedOutput": "true", "isSample": false, "weight": 1.0, "order": 5 }
+    ]
+  },
+  {
+    "title": "Maximum Subarray",
+    "description": "Given an integer array nums, find the subarray with the largest sum, and return its sum.",
+    "constraints": "1 <= nums.length <= 10^5\n-10^4 <= nums[i] <= 10^4",
+    "inputFormat": "A single line of space-separated integers",
+    "outputFormat": "A single integer (maximum subarray sum)",
+    "sampleInput": "-2 1 -3 4 -1 2 1 -5 4",
+    "sampleOutput": "6",
+    "maxMarks": 150,
+    "allowedLanguages": ["python", "java", "c", "cpp"],
+    "timeLimitMs": 2000,
+    "memoryLimitKb": 262144,
+    "starterCodePython": "nums = list(map(int, input().split()))\n# Find maximum subarray sum\n",
+    "testCases": [
+      { "input": "-2 1 -3 4 -1 2 1 -5 4", "expectedOutput": "6", "isSample": true, "weight": 1.0, "order": 1 },
+      { "input": "1", "expectedOutput": "1", "isSample": true, "weight": 1.0, "order": 2 },
+      { "input": "5 4 -1 7 8", "expectedOutput": "23", "isSample": false, "weight": 1.0, "order": 3 },
+      { "input": "-1 -2 -3 -4", "expectedOutput": "-1", "isSample": false, "weight": 1.0, "order": 4 },
+      { "input": "1 2 3 4 5", "expectedOutput": "15", "isSample": false, "weight": 1.0, "order": 5 }
+    ]
+  },
+  {
+    "title": "Trapping Rain Water",
+    "description": "Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.\n\nReturn the total amount of water trapped.",
+    "constraints": "n == height.length\n1 <= n <= 2 * 10^4\n0 <= height[i] <= 10^5",
+    "inputFormat": "A single line containing space-separated non-negative integers representing the elevation map `height`.",
+    "outputFormat": "A single integer representing the total units of rain water trapped.",
+    "sampleInput": "0 1 0 2 1 0 1 3 2 1 2 1",
+    "sampleOutput": "6",
+    "maxMarks": 150,
+    "allowedLanguages": ["python", "java", "c", "cpp"],
+    "timeLimitMs": 2000,
+    "memoryLimitKb": 262144,
+    "starterCodePython": "def trap(height):\n    # Write your solution here\n    pass\n\n# Read input\nline = input().strip()\nif not line:\n    print(0)\nelse:\n    height = list(map(int, line.split()))\n    print(trap(height))\n",
+    "starterCodeJava": "import java.util.*;\n\npublic class Main {\n    public static int trap(int[] height) {\n        // Write your solution here\n        return 0;\n    }\n\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        if (!sc.hasNextLine()) {\n            System.out.println(0);\n            return;\n        }\n        String line = sc.nextLine().trim();\n        if (line.isEmpty()) {\n            System.out.println(0);\n            return;\n        }\n        String[] parts = line.split(\"\\\\s+\");\n        int[] height = new int[parts.length];\n        for (int i = 0; i < parts.length; i++) {\n            height[i] = Integer.parseInt(parts[i]);\n        }\n        System.out.println(trap(height));\n    }\n}\n",
+    "starterCodeC": "#include <stdio.h>\n#include <stdlib.h>\n\nint trap(int* height, int heightSize) {\n    // Write your solution here\n    return 0;\n}\n\nint main() {\n    int height[20005];\n    int n = 0;\n    while (scanf(\"%d\", &height[n]) == 1) {\n        n++;\n    }\n    printf(\"%d\\n\", trap(height, n));\n    return 0;\n}\n",
+    "starterCodeCpp": "#include <iostream>\n#include <vector>\nusing namespace std;\n\nint trap(vector<int>& height) {\n    // Write your solution here\n    return 0;\n}\n\nint main() {\n    vector<int> height;\n    int val;\n    while (cin >> val) {\n        height.push_back(val);\n    }\n    cout << trap(height) << endl;\n    return 0;\n}\n",
+    "testCases": [
+      { "input": "0 1 0 2 1 0 1 3 2 1 2 1", "expectedOutput": "6", "isSample": true, "weight": 1.0, "order": 1 },
+      { "input": "4 2 0 3 2 5", "expectedOutput": "9", "isSample": true, "weight": 1.0, "order": 2 },
+      { "input": "1 2 3 4 5", "expectedOutput": "0", "isSample": false, "weight": 1.0, "order": 3 },
+      { "input": "5 4 3 2 1", "expectedOutput": "0", "isSample": false, "weight": 1.0, "order": 4 },
+      { "input": "3 0 2 0 4", "expectedOutput": "7", "isSample": false, "weight": 1.0, "order": 5 },
+      { "input": "2 0 2", "expectedOutput": "2", "isSample": false, "weight": 1.0, "order": 6 },
+      { "input": "5 1 1 1 5", "expectedOutput": "12", "isSample": false, "weight": 1.0, "order": 7 }
+    ]
+  }
+]

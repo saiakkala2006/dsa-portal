@@ -1,0 +1,260 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  STUDENT
+}
+
+enum SubmissionStatus {
+  PENDING
+  RUNNING
+  ACCEPTED
+  WRONG_ANSWER
+  TIME_LIMIT_EXCEEDED
+  MEMORY_LIMIT_EXCEEDED
+  RUNTIME_ERROR
+  COMPILE_ERROR
+  INTERNAL_ERROR
+}
+
+enum SessionStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  SUBMITTED
+  AUTO_SUBMITTED
+  TIMED_OUT
+}
+
+enum ProctorEventType {
+  TAB_SWITCH
+  FULLSCREEN_EXIT
+  COPY_ATTEMPT
+  PASTE_ATTEMPT
+  RIGHT_CLICK
+  WINDOW_BLUR
+  WINDOW_FOCUS
+  FULLSCREEN_ENTER
+  WARNING_SHOWN
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  role         Role
+  name         String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  student Student?
+  admin   Admin?
+
+  @@map("users")
+}
+
+model Student {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  name      String
+  regNo     String   @unique
+  className String
+  email     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessions ExamSession[]
+  results  Result[]
+
+  @@map("students")
+}
+
+model Admin {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("admins")
+}
+
+model Exam {
+  id                        String   @id @default(uuid())
+  title                     String
+  description               String?  @db.Text
+  durationMinutes           Int
+  startAt                   DateTime
+  endAt                     DateTime
+  isPublished               Boolean  @default(false)
+  resultsPublished          Boolean  @default(false)
+  allowedLanguages          String[] @default(["python", "java", "c", "cpp"])
+  maxTabSwitches            Int      @default(5)
+  autoSubmitAfterTabSwitches Boolean @default(true)
+  fullscreenRequired        Boolean  @default(true)
+  tabSwitchPenalty          Float    @default(0)
+  createdAt                 DateTime @default(now())
+  updatedAt                 DateTime @updatedAt
+
+  questions ExamQuestion[]
+  sessions  ExamSession[]
+  results   Result[]
+
+  @@map("exams")
+}
+
+model Question {
+  id                String   @id @default(uuid())
+  title             String
+  description       String   @db.Text
+  constraints       String?  @db.Text
+  inputFormat       String?  @db.Text
+  outputFormat      String?  @db.Text
+  sampleInput       String?  @db.Text
+  sampleOutput      String?  @db.Text
+  maxMarks          Int      @default(100)
+  allowedLanguages  String[] @default(["python", "java", "c", "cpp"])
+  starterCodePython String?  @db.Text
+  starterCodeJava   String?  @db.Text
+  starterCodeC      String?  @db.Text
+  starterCodeCpp    String?  @db.Text
+  timeLimitMs       Int      @default(2000)
+  memoryLimitKb     Int      @default(262144)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  testCases TestCase[]
+  exams     ExamQuestion[]
+
+  @@map("questions")
+}
+
+model TestCase {
+  id             String  @id @default(uuid())
+  questionId     String
+  input          String  @db.Text
+  expectedOutput String  @db.Text
+  isSample       Boolean @default(false)
+  weight         Float   @default(1.0)
+  order          Int     @default(0)
+
+  question    Question         @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  testResults TestCaseResult[]
+
+  @@map("test_cases")
+}
+
+model ExamQuestion {
+  examId           String
+  questionId       String
+  order            Int     @default(0)
+  maxMarksOverride Int?
+
+  exam     Exam     @relation(fields: [examId], references: [id], onDelete: Cascade)
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@id([examId, questionId])
+  @@map("exam_questions")
+}
+
+model ExamSession {
+  id                 String        @id @default(uuid())
+  examId             String
+  studentId          String
+  startedAt          DateTime      @default(now())
+  submittedAt        DateTime?
+  timeTakenSeconds   Int?
+  status             SessionStatus @default(IN_PROGRESS)
+  tabSwitchCount     Int           @default(0)
+  fullscreenExitCount Int          @default(0)
+  lastHeartbeat      DateTime      @default(now())
+
+  exam         Exam           @relation(fields: [examId], references: [id], onDelete: Cascade)
+  student      Student        @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  submissions  Submission[]
+  proctorEvents ProctorEvent[]
+
+  @@unique([examId, studentId])
+  @@map("exam_sessions")
+}
+
+model Submission {
+  id              String           @id @default(uuid())
+  sessionId       String
+  questionId      String
+  language        String
+  sourceCode      String           @db.Text
+  status          SubmissionStatus @default(PENDING)
+  score           Float            @default(0)
+  passedTestCases Int              @default(0)
+  totalTestCases  Int              @default(0)
+  compileOutput   String?          @db.Text
+  runtimeOutput   String?          @db.Text
+  submittedAt     DateTime         @default(now())
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  session     ExamSession      @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  testResults TestCaseResult[]
+
+  @@map("submissions")
+}
+
+model TestCaseResult {
+  id           String           @id @default(uuid())
+  submissionId String
+  testCaseId   String
+  status       SubmissionStatus @default(PENDING)
+  stdout       String?          @db.Text
+  stderr       String?          @db.Text
+  timeMs       Float?
+  memoryKb     Float?
+  passed       Boolean          @default(false)
+
+  submission Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  testCase   TestCase   @relation(fields: [testCaseId], references: [id], onDelete: Cascade)
+
+  @@map("test_case_results")
+}
+
+model ProctorEvent {
+  id        String           @id @default(uuid())
+  sessionId String
+  type      ProctorEventType
+  timestamp DateTime         @default(now())
+  metadata  Json?
+
+  session ExamSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@map("proctor_events")
+}
+
+model Result {
+  id                String    @id @default(uuid())
+  examId            String
+  studentId         String
+  questionsAttempted Int      @default(0)
+  testCasesPassed   Int       @default(0)
+  totalTestCases    Int       @default(0)
+  timeTakenSeconds  Int       @default(0)
+  tabSwitchCount    Int       @default(0)
+  finalScore        Float     @default(0)
+  publishedAt       DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  exam    Exam    @relation(fields: [examId], references: [id], onDelete: Cascade)
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([examId, studentId])
+  @@map("results")
+}

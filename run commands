@@ -1,0 +1,47 @@
+# DSA EXAM PORTAL - HOW TO START AFTER REBOOT
+
+============================================================
+OPTION 1: ONE-CLICK START (RECOMMENDED)
+============================================================
+1. Open Docker Desktop.
+2. Double-click "start.bat" in this folder.
+   (It starts Docker containers, Backend on port 4000, and Frontend on port 3000 in separate windows).
+
+============================================================
+OPTION 2: MANUAL TERMINAL COMMANDS
+============================================================
+
+--- STEP 1: Ensure Docker Desktop is Running ---
+Make sure Docker Desktop is open.
+
+--- STEP 2: Start Code Execution Engine (Judge0 + Redis) ---
+Open PowerShell in the project root:
+cd "c:\Users\saiak\Downloads\dsa portal"
+docker compose up -d
+
+(Note: If 'docker' command isn't recognized, run:
+& "C:\Program Files\Docker\Docker\resources\bin\docker.exe" compose up -d)
+
+--- STEP 3: Start Backend API (Port 4000) ---
+Open a new PowerShell terminal:
+cd "c:\Users\saiak\Downloads\dsa portal\backend"
+npm run dev
+
+--- STEP 4: Start Frontend Portal (Port 3000) ---
+Open another new PowerShell terminal:
+cd "c:\Users\saiak\Downloads\dsa portal\frontend"
+npm run dev
+
+============================================================
+PORTAL ACCESS LINKS
+============================================================
+Frontend / Landing: http://localhost:3000
+Admin Portal:       http://localhost:3000/admin/login
+Student Portal:     http://localhost:3000/student/login
+Backend Health:     http://localhost:4000/api/health
+
+============================================================
+DEFAULT LOGIN CREDENTIALS
+============================================================
+Admin:   admin@examportal.com / admin123
+Student: STU001 / student123 (or STU002, STU003)
