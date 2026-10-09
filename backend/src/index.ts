@@ -19,13 +19,18 @@ import studentExamRoutes from './routes/studentExam';
 
 const app = express();
 
+// Trust proxy for Cloudflare Tunnel
+app.set('trust proxy', 1);
+
 // Security middleware
 app.use(helmet({
   crossOriginResourcePolicy: { policy: 'cross-origin' },
 }));
 
 app.use(cors({
-  origin: config.cors.origin,
+  origin: (origin, callback) => {
+    callback(null, true);
+  },
   credentials: true,
 }));
 
