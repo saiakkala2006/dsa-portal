@@ -105,10 +105,6 @@ export default function StudentLoginPage() {
             </Link>
           </div>
         </form>
-
-        <p className="text-center text-xs text-dark-500 mt-6">
-          Sample: STU001 / student123
-        </p>
       </div>
     </div>
   );

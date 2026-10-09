@@ -109,10 +109,6 @@ export default function AdminLoginPage() {
             </Link>
           </div>
         </form>
-
-        <p className="text-center text-xs text-dark-500 mt-6">
-          Default: admin@examportal.com / admin123
-        </p>
       </div>
     </div>
   );
